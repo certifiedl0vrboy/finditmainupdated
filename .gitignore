@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+
+# Environment variables (KEYS!)
+.env
+.env.*
+.env.local
+.env.production
+!.env.example
+
+# Build output
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Vercel
+.vercel
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# TypeScript build info
+*.tsbuildinfo

@@ -1,0 +1,100 @@
+/* FINDIT App Styles */
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom selection color */
+::selection {
+  background-color: rgba(0, 128, 0, 0.3);
+  color: white;
+}
+
+/* Focus styles */
+*:focus-visible {
+  outline: 2px solid #008000;
+  outline-offset: 2px;
+}
+
+/* Button hover lift effect */
+button:not(:disabled):hover {
+  transform: translateY(-1px);
+}
+
+button:not(:disabled):active {
+  transform: translateY(0);
+}
+
+/* Card hover effect */
+.glass:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Input focus animation */
+input:focus,
+textarea:focus {
+  box-shadow: 0 0 0 2px rgba(0, 128, 0, 0.2);
+}
+
+/* Progress bar styling */
+[data-slot="progress-indicator"] {
+  background: linear-gradient(90deg, #008000, #00a000);
+}
+
+/* Badge styling */
+.badge-kenya {
+  background: linear-gradient(135deg, #000000, #ce1126, #008000);
+}
+
+/* Loading skeleton animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .image-collage {
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ── Vibrant Kenyan accent overrides ─────────────────────── */
+/* Green focus rings across all inputs */
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: #0284C7 !important;
+  box-shadow: 0 0 0 3px rgba(0, 107, 53, 0.15) !important;
+}
+
+/* Vibrant page scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #F2EFE8; }
+::-webkit-scrollbar-thumb { 
+  background: linear-gradient(180deg, #0284C7, #F5A623);
+  border-radius: 10px; 
+}
+::-webkit-scrollbar-thumb:hover { background: #0284C7; }

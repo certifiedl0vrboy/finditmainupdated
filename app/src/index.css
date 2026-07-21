@@ -1,0 +1,177 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ═══════════════════════════════════════════════════════════════
+   FINDIT — VIBRANT KENYAN THEME
+   Colors: Kenyan Green #0284C7 · Sun Gold #F5A623 · Kenyan Red #CE1126
+   Background: Soft Parchment #F2EFE8
+   ═══════════════════════════════════════════════════════════════ */
+
+@layer base {
+  :root {
+    --background: 42 23% 93%;      /* soft parchment #F2EFE8 */
+    --foreground: 20 14% 15%;       /* rich dark brown */
+
+    --card: 40 80% 99%;
+    --card-foreground: 20 14% 15%;
+
+    --popover: 40 80% 99%;
+    --popover-foreground: 20 14% 15%;
+
+    /* Primary = Vibrant Sky Blue (Polished) */
+    --primary: 201 98% 39%;        /* #0284C7 */
+    --primary-foreground: 40 100% 98%;
+
+    --secondary: 36 60% 94%;        /* warm cream-amber */
+    --secondary-foreground: 148 100% 18%;
+
+    --muted: 36 40% 92%;
+    --muted-foreground: 25 30% 50%;
+
+    --accent: 36 90% 56%;           /* gold accent #F5A623 */
+    --accent-foreground: 0 0% 10%;
+
+    --destructive: 350 90% 44%;     /* Kenyan red */
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 36 30% 88%;
+    --input: 36 30% 88%;
+    --ring: 201 98% 39%;
+
+    --radius: 0.75rem;
+
+    /* ── Brand tokens ────────────────────────────────── */
+    --green: #0284C7;
+    --green-light: #7DD3FC;
+    --green-dark: #075985;
+    --gold: #F5A623;
+    --gold-light: #FFD166;
+    --red: #CE1126;
+    --cream: #F2EFE8;
+    --cream-dark: #FFF0D6;
+    --brown: #7C4B2A;
+  }
+
+  .dark {
+    --background: 148 60% 8%;
+    --foreground: 40 80% 95%;
+    --card: 148 50% 10%;
+    --card-foreground: 40 80% 95%;
+    --popover: 148 50% 10%;
+    --popover-foreground: 40 80% 95%;
+    --primary: 148 80% 45%;
+    --primary-foreground: 0 0% 5%;
+    --secondary: 148 30% 16%;
+    --secondary-foreground: 40 80% 95%;
+    --muted: 148 25% 18%;
+    --muted-foreground: 148 20% 60%;
+    --accent: 36 90% 56%;
+    --accent-foreground: 0 0% 5%;
+    --destructive: 350 80% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 148 25% 22%;
+    --input: 148 25% 22%;
+    --ring: 148 70% 45%;
+  }
+}
+
+@layer base {
+  * { @apply border-border; }
+  body { @apply bg-background text-foreground; }
+
+  /* Warm sunlit body background */
+  html {
+    background: #F2EFE8;
+  }
+}
+
+/* ─── Global vibrant accents ──────────────────────────────────── */
+@layer utilities {
+  .glass-card {
+    @apply bg-white/90 backdrop-blur-[10px] border border-black/5;
+  }
+
+  /* Sky flag stripe accent line */
+  .kenya-stripe {
+    background: linear-gradient(90deg, #0284C7 33.3%, #000000 33.3% 36%, #CE1126 36%);
+    height: 4px;
+    border-radius: 2px;
+  }
+
+  /* Vibrant sky gradient button */
+  .btn-kenya {
+    background: linear-gradient(135deg, #0284C7 0%, #075985 100%);
+    color: white;
+    box-shadow: 0 4px 16px rgba(2, 132, 199, 0.35);
+    transition: all 0.3s ease;
+  }
+  .btn-kenya:hover {
+    background: linear-gradient(135deg, #075985 0%, #0284C7 100%);
+    box-shadow: 0 6px 24px rgba(2, 132, 199, 0.45);
+    transform: translateY(-1px);
+  }
+
+  /* Gold shimmer text */
+  .text-gold-shimmer {
+    background: linear-gradient(90deg, #F5A623, #FFD166, #F5A623);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 2.5s linear infinite;
+  }
+
+  /* Warm shadow for cards */
+  .shadow-warm {
+    box-shadow: 0 4px 24px rgba(124, 75, 42, 0.12), 0 1px 4px rgba(0,0,0,0.06);
+  }
+
+  /* Green glow for primary elements */
+  .glow-green {
+    box-shadow: 0 0 0 3px rgba(0, 107, 53, 0.15), 0 4px 20px rgba(0, 107, 53, 0.2);
+  }
+}
+
+/* ─── Scrollbars ──────────────────────────────────────────────── */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+.custom-scrollbar::-webkit-scrollbar { width: 6px; }
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 107, 53, 0.04);
+  border-radius: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(0, 107, 53, 0.25);
+  border-radius: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 107, 53, 0.45);
+}
+
+/* ─── Animations ──────────────────────────────────────────────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translate3d(0, 40px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+@keyframes pulse-blue {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 107, 53, 0.4); }
+  50%       { box-shadow: 0 0 0 8px rgba(0, 107, 53, 0); }
+}
+
+/* ─── Selection color — vibrant green ────────────────────────── */
+::selection {
+  background: rgba(0, 107, 53, 0.2);
+  color: #075985;
+}
