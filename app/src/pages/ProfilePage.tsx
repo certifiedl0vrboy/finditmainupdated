@@ -242,11 +242,6 @@ const ProfilePage = () => {
         }
 
         const { data: { user } } = await supabase.auth.getUser();
-        if (!user) {
-            toast.error('Please log in to request live tracking.');
-            navigate('/login');
-            return;
-        }
         
         setIsRequestingTracking(true);
         navigator.geolocation.getCurrentPosition(
@@ -255,7 +250,7 @@ const ProfilePage = () => {
                 const { data, error } = await supabase
                     .from('bookings')
                     .insert({
-                        customer_id: user.id,
+                        customer_id: user?.id || null,
                         provider_id: provider.id,
                         customer_lat: latitude,
                         customer_lng: longitude,
@@ -271,6 +266,12 @@ const ProfilePage = () => {
                     console.error('Failed to create booking:', error);
                     toast.error('Could not send your request. Please try again.');
                     return;
+                }
+
+                if (!user) {
+                    const localBookings: string[] = JSON.parse(localStorage.getItem('anonymous_bookings') || '[]');
+                    localBookings.push(data.id);
+                    localStorage.setItem('anonymous_bookings', JSON.stringify(localBookings));
                 }
 
                 toast.success(`Request sent to ${provider.name}. You can track them once they accept.`);

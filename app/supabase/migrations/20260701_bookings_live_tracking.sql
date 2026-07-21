@@ -7,7 +7,7 @@
 
 create table if not exists public.bookings (
     id uuid primary key default gen_random_uuid(),
-    customer_id uuid not null references auth.users(id) on delete cascade,
+    customer_id uuid references auth.users(id) on delete cascade,
     provider_id uuid not null references public.profiles(id) on delete cascade,
 
     -- Where the customer needs the service
@@ -56,11 +56,11 @@ create trigger bookings_set_updated_at
 -- ─── Row Level Security ─────────────────────────────────────────────────────
 alter table public.bookings enable row level security;
 
--- Customers can see their own bookings
+-- Customers can see their own bookings (either matching user id, or if anonymous/null)
 drop policy if exists "Customers can view their own bookings" on public.bookings;
 create policy "Customers can view their own bookings"
     on public.bookings for select
-    using (auth.uid() = customer_id);
+    using (customer_id is null or auth.uid() = customer_id);
 
 -- Providers can see bookings assigned to them
 drop policy if exists "Providers can view their assigned bookings" on public.bookings;
@@ -70,18 +70,18 @@ create policy "Providers can view their assigned bookings"
         provider_id in (select id from public.profiles where auth_user_id = auth.uid())
     );
 
--- Customers can create a booking request for themselves
+-- Customers can create a booking request (either for themselves, or anonymously)
 drop policy if exists "Customers can create bookings" on public.bookings;
 create policy "Customers can create bookings"
     on public.bookings for insert
-    with check (auth.uid() = customer_id);
+    with check (customer_id is null or auth.uid() = customer_id);
 
 -- Customers can update their own bookings (e.g. cancel)
 drop policy if exists "Customers can update their own bookings" on public.bookings;
 create policy "Customers can update their own bookings"
     on public.bookings for update
-    using (auth.uid() = customer_id)
-    with check (auth.uid() = customer_id);
+    using (customer_id is null or auth.uid() = customer_id)
+    with check (customer_id is null or auth.uid() = customer_id);
 
 -- Providers can update bookings assigned to them (accept, share location, complete)
 drop policy if exists "Providers can update their assigned bookings" on public.bookings;
