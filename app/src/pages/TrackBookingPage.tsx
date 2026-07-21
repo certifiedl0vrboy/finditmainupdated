@@ -7,6 +7,8 @@ import { useBookingRealtime } from '@/hooks/useBookingRealtime';
 import LiveTrackingMap from '@/components/LiveTrackingMap';
 import { toast } from 'sonner';
 
+import { LocalNotifications } from '@capacitor/local-notifications';
+
 interface ProviderSummary {
   id: string;
   name: string;
@@ -47,6 +49,78 @@ const TrackBookingPage = () => {
   const navigate = useNavigate();
   const { booking, loading, error } = useBookingRealtime(bookingId ?? null);
   const [provider, setProvider] = useState<ProviderSummary | null>(null);
+  const [lastStatus, setLastStatus] = useState<string | null>(null);
+
+  // Request notifications permission
+  useEffect(() => {
+    (async () => {
+      try {
+        await LocalNotifications.requestPermissions();
+      } catch (err) {
+        console.warn('LocalNotifications permission request failed:', err);
+      }
+      if ('Notification' in window && Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+        Notification.requestPermission();
+      }
+    })();
+  }, []);
+
+  // Monitor booking status changes to send notifications
+  useEffect(() => {
+    if (!booking) return;
+
+    // Initialize lastStatus on first load
+    if (lastStatus === null) {
+      setLastStatus(booking.status);
+      return;
+    }
+
+    if (booking.status !== lastStatus) {
+      const providerName = provider?.name || 'Your provider';
+      let title = '';
+      let body = '';
+
+      if (booking.status === 'accepted') {
+        title = 'Provider Accepted! 🎉';
+        body = `${providerName} has accepted your request. Click here to view details.`;
+      } else if (booking.status === 'on_the_way') {
+        title = 'Provider is on the Way! 🚗';
+        body = `${providerName} is now heading to your location. Track them live!`;
+      } else if (booking.status === 'arrived') {
+        title = 'Provider Arrived! 📍';
+        body = `${providerName} has arrived at your location.`;
+      }
+
+      if (title && body) {
+        // Trigger Capacitor native notification
+        try {
+          LocalNotifications.schedule({
+            notifications: [
+              {
+                title,
+                body,
+                id: new Date().getTime(),
+                schedule: { at: new Date(Date.now() + 1000) },
+                extra: { bookingId: booking.id },
+              },
+            ],
+          });
+        } catch (err) {
+          console.warn('Native notification failed:', err);
+        }
+
+        // Web Notification fallback
+        if ('Notification' in window && Notification.permission === 'granted') {
+          new Notification(title, { body });
+        }
+
+        // Toast notice
+        toast.success(`${title} - ${body}`, { duration: 6000 });
+      }
+
+      setLastStatus(booking.status);
+    }
+  }, [booking, lastStatus, provider]);
 
   useEffect(() => {
     if (!booking?.provider_id) return;
