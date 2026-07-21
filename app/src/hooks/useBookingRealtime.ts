@@ -7,6 +7,7 @@ export interface Booking {
   id: string;
   customer_id: string;
   provider_id: string;
+  customer_name: string | null;
   customer_lat: number;
   customer_lng: number;
   customer_address: string | null;
