@@ -204,7 +204,7 @@ const ProviderBookingsPanel = ({ providerId }: ProviderBookingsPanelProps) => {
           fetchBookings();
           if (payload.eventType === 'INSERT') {
             try {
-              const newBooking = payload.new as Booking;
+              const newBooking = payload.new as any;
               const customerName = newBooking.customer_name || 'A new client';
               const locationInfo = newBooking.customer_address ? ` at ${newBooking.customer_address}` : '';
               
@@ -226,7 +226,7 @@ const ProviderBookingsPanel = ({ providerId }: ProviderBookingsPanelProps) => {
             
             // Fallback to web notification if available
             if ('Notification' in window && Notification.permission === 'granted') {
-              const newBooking = payload.new as Booking;
+              const newBooking = payload.new as any;
               const customerName = newBooking.customer_name || 'A new client';
               const locationInfo = newBooking.customer_address ? ` at ${newBooking.customer_address}` : '';
               new Notification('New Job Request!', { body: `${customerName} has requested your services${locationInfo}.` });
