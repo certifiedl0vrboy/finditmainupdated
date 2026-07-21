@@ -24,27 +24,16 @@ const SavedPage = () => {
     let cancelled = false;
 
     (async () => {
-      const localBookingIds: string[] = JSON.parse(localStorage.getItem('anonymous_bookings') || '[]');
       const { data: { user } } = await supabase.auth.getUser();
-      
-      let query = supabase.from('bookings').select('*');
-      
-      if (user) {
-        if (localBookingIds.length > 0) {
-          query = query.or(`customer_id.eq.${user.id},id.in.(${localBookingIds.map(id => `"${id}"`).join(',')})`);
-        } else {
-          query = query.eq('customer_id', user.id);
-        }
-      } else {
-        if (localBookingIds.length > 0) {
-          query = query.in('id', localBookingIds);
-        } else {
-          if (!cancelled) setLoadingBookings(false);
-          return;
-        }
+      if (!user) {
+        if (!cancelled) setLoadingBookings(false);
+        return;
       }
 
-      const { data, error } = await query
+      const { data, error } = await supabase
+        .from('bookings')
+        .select('*')
+        .eq('customer_id', user.id)
         .order('created_at', { ascending: false })
         .limit(10);
 
